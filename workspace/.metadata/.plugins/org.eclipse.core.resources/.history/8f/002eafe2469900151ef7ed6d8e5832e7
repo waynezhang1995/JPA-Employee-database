@@ -1,0 +1,20 @@
+package service;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import CandP.Patient;
+
+public class FindPatient {
+   public static void main( String[ ] args ) {
+   
+      EntityManagerFactory emfactory = Persistence.createEntityManagerFactory( "csc370" );
+      EntityManager entitymanager = emfactory.createEntityManager();
+      Patient employee = entitymanager.find(Patient.class, 1201 );
+
+      System.out.println("employee ID = " + employee.getEid( ));
+      System.out.println("employee NAME = " + employee.getEname( ));
+      System.out.println("employee SALARY = " + employee.getSalary( ));
+      System.out.println("employee DESIGNATION = " + employee.getDeg( ));
+   }
+}

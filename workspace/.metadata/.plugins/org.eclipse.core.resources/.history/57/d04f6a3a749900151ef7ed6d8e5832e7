@@ -1,0 +1,60 @@
+package CandP;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table
+public class Patient {
+
+   @Id
+   @GeneratedValue(strategy = GenerationType.AUTO) 	
+   
+   private int PatientID;
+   private String Pname;
+   private int Pnumber;
+   
+   public Patient(int PatientID, String Pname, int Pnumber) {
+      super( );
+      this.PatientID = PatientID;
+      this.Pname = Pname;
+      this.Pnumber = Pnumber;
+   }
+
+   public Patient( ) {
+      super();
+   }
+
+   public int getPatientID( ) {
+      return PatientID;
+   }
+   
+   public void setPatientID(int PatientID) {
+      this.PatientID = PatientID;
+   }
+   
+   public String getPname( ) {
+      return Pname;
+   }
+   
+   public void setPname(String Pname) {
+      this.Pname = Pname;
+   }
+
+   public int getPnumber( ) {
+      return Pnumber;
+   }
+   
+   public void setPnumber(int Pnumber) {
+      this.Pnumber = Pnumber;
+   }
+
+
+   @Override
+   public String toString() {
+      return "Patient [Patient ID=" + PatientID + ", Patient Name=" + Pname + ", Patient Number=" + Pnumber + "]";
+   }
+}

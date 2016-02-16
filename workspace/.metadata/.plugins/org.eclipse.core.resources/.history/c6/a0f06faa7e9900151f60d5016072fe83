@@ -1,0 +1,50 @@
+package CandP;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+@Entity
+@Table
+public class Appointment {
+	@Id
+	   @GeneratedValue(strategy = GenerationType.AUTO) 	
+	   
+	   private int date;
+	   private int time;
+	   
+	   
+	   public Appointment(int date, int time) {
+	      super( );
+	      this.date = date;
+	      this.time = time;
+	   }
+
+	   public Appointment() {
+	      super();
+	   }
+
+	   public int getDate( ) {
+	      return date;
+	   }
+	   
+	   public void setDate(int date) {
+	      this.date = date;
+	   }
+	   
+	   public int getTime( ) {
+	      return time;
+	   }
+	   
+	   public void setTime(int time) {
+	      this.time = time;
+	   }
+
+	   @Override
+	   public String toString() {
+	      return "Appointment [Date=" + date + ", time=" + time + ", salary=" + "]";
+	   }
+	}
+
+

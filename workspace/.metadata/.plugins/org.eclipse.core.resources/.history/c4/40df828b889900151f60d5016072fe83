@@ -1,0 +1,190 @@
+package Controlpanel;
+
+import java.util.*;
+
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
+
+import CandP.Patient;
+import CandP.Appointment;
+
+public class UserInterface {
+	public static void main(String[] args) {
+		EntityManagerFactory emfactory = Persistence
+				.createEntityManagerFactory("csc370");
+		EntityManager entitymanager = emfactory.createEntityManager();
+		String userinput = "";
+		Scanner input = new Scanner(System.in);
+		while (true) {
+			System.out.printf("\n\n\n\n\n\n**********Welcome to Client and Patient Database**********\n*                                                        *\n*                                                        *\n*                                                        *\n*                                                        *\n");
+			System.out.printf("**********************************************************\n\n\n\n");
+			System.out.printf("Please choose 'Appointment' mode or 'Patient' mode(Enter 'Exit' to quit)\n");
+			System.out.printf("=======> ");
+			userinput = input.next();
+			if (userinput.equalsIgnoreCase("Patient")) {
+				while (true) {
+					Patient patient = new Patient();
+					System.out.printf("\nPlease choose one of the following options:\n\n");
+					System.out.printf("'Enter': Insert a new patient\n");
+					System.out.printf("'Search': Search a new patient by Last Name\n");
+					System.out.printf("'Delete': Delete a patient by PatientID\n");
+					System.out.printf("'Back': Go back\n");
+					System.out.printf("'Exit': Quit Program\n");
+					System.out.printf("=======> ");
+					userinput = input.next();
+					if (userinput.equalsIgnoreCase("Enter")) {
+						createPatient(patient, entitymanager);
+					} else if (userinput.equalsIgnoreCase("Search")) {
+						searchPatient(patient, entitymanager);
+					} else if (userinput.equalsIgnoreCase("Delete")) {
+						deletePatient(patient, entitymanager);
+					} else if (userinput.equalsIgnoreCase("Exit")) {
+						input.close();
+						entitymanager.close();
+						emfactory.close();
+						System.exit(0);
+					} else if (userinput.equalsIgnoreCase("Back")) {
+						break;
+					}
+				}
+			}
+			if (userinput.equalsIgnoreCase("Appointment")) {
+				while (true) {
+					Appointment appoinment = new Appointment();
+					System.out.printf("\nPlease choose one of the following options:\n\n");
+					System.out.printf("'Create': Create a new Appointment\n");
+					System.out.printf("'View': Search a new patient by Last Name\n");
+					System.out.printf("'Delete': Delete a patient by PatientID\n");
+					System.out.printf("'Back': Go back\n");
+					System.out.printf("'Exit': Quit Program\n");
+					System.out.printf("=======> ");
+					userinput = input.next();
+					if (userinput.equalsIgnoreCase("Create")) {
+						createAppo(appoinment, entitymanager);
+					} else if (userinput.equalsIgnoreCase("View")) {
+						viewAppo(appoinment, entitymanager);
+					} else if (userinput.equalsIgnoreCase("Delete")) {
+						deleteAppo(appoinment, entitymanager);
+					} else if (userinput.equalsIgnoreCase("Exit")) {
+						input.close();
+						entitymanager.close();
+						emfactory.close();
+						System.exit(0);
+					} else if (userinput.equalsIgnoreCase("Back")) {
+						break;
+					}
+				}
+			}
+			if (userinput.equalsIgnoreCase("Exit")) {
+				input.close();
+				entitymanager.close();
+				emfactory.close();
+				System.exit(0);
+			}
+		}
+
+	}
+
+	public static void createPatient(Patient patient,
+			EntityManager entitymanager) {
+		entitymanager.getTransaction().begin();
+		Scanner createP = new Scanner(System.in);
+		System.out.printf("\nPlease provide Patient ID =====> ");
+		int NewPID = createP.nextInt();
+		System.out.printf("Please provide Patient First Name =====> ");
+		String NewPfirstName = createP.next();
+		System.out.printf("Please provide Patient Last Name =====> ");
+		String NewPlastName = createP.next();
+		System.out.printf("Please provide Patient Number =====> ");
+		int NewPNumber = createP.nextInt();
+
+		patient.setPatientID(NewPID);
+		patient.setPfirstname(NewPfirstName);
+		patient.setPlastname(NewPlastName);
+		patient.setPnumber(NewPNumber);
+
+		entitymanager.persist(patient);
+		entitymanager.getTransaction().commit();
+		// createP.close();
+	}
+
+	public static void searchPatient(Patient patient,
+			EntityManager entitymanager) {
+		Scanner findP = new Scanner(System.in);
+		System.out.printf("Patient Last Name: ");
+		String findlastname = findP.next();
+		Query q = entitymanager
+				.createQuery("SELECT x FROM Patient x WHERE x.Plastname = "
+						+ "'" + findlastname + "'");
+		List<Patient> results = q.getResultList();
+		// patient = entitymanager.find(Patient.class, findPID );
+		System.out.println(results);
+		// System.out.println("Patient First NAME = " + patient.getPfirstname(
+		// ));
+		// System.out.println("Patient Number = " + patient.getPnumber( ));
+		// findP.close();
+	}
+
+	public static void deletePatient(Patient patient,
+			EntityManager entitymanager) {
+		entitymanager.getTransaction().begin();
+		Scanner findP = new Scanner(System.in);
+		System.out.printf("Patient ID: ");
+		int findPID = findP.nextInt();
+		patient = entitymanager.find(Patient.class, findPID);
+		entitymanager.remove(patient);
+		entitymanager.getTransaction().commit();
+	}
+
+	public static void createAppo(Appointment appointment,
+			EntityManager entitymanager) {
+		entitymanager.getTransaction().begin();
+		Scanner createP = new Scanner(System.in);
+		System.out.printf("Patient ID: ");
+		int NewPID = createP.nextInt();
+		System.out.printf("Appointment Date 'yyyy-mm-dd': ");
+		String NewAppodate = createP.next();
+		System.out.printf("Appointment Time 'hh:mm': ");
+		String NewAppotime = createP.next();
+
+		appointment.setPatientID(NewPID);
+		appointment.setDate(NewAppodate);
+		appointment.setTime(NewAppotime);
+
+		entitymanager.persist(appointment);
+		entitymanager.getTransaction().commit();
+		// createP.close();
+	}
+
+	public static void viewAppo(Appointment appointment,
+			EntityManager entitymanager) {
+
+		Scanner findP = new Scanner(System.in);
+		System.out.printf("Start date: ");
+		String start = findP.next();
+		System.out.printf("End date: ");
+		String end = findP.next();
+
+		Query q = entitymanager
+				.createQuery("SELECT x FROM Appointment x WHERE x.date >= "
+						+ "'" + start + "'" + " AND " + "x.date <= " + "'"
+						+ end + "'");
+		List<Patient> results = q.getResultList();
+		// patient = entitymanager.find(Patient.class, findPID );
+		System.out.println(results);
+
+	}
+
+	public static void deleteAppo(Appointment appointment,
+			EntityManager entitymanager) {
+		entitymanager.getTransaction().begin();
+		Scanner findP = new Scanner(System.in);
+		System.out.printf("Patient ID: ");
+		int findPID = findP.nextInt();
+		appointment = entitymanager.find(Appointment.class, findPID);
+		entitymanager.remove(appointment);
+		entitymanager.getTransaction().commit();
+	}
+}
